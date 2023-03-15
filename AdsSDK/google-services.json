@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1061627715982",
+    "project_id": "sticker-app-96cf9",
+    "storage_bucket": "sticker-app-96cf9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1061627715982:android:3f96d4c0f81fab774444df",
+        "android_client_info": {
+          "package_name": "com.example.adssdk"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1061627715982-ftj5thabveldpetq51ou5r03gpo5l578.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCW_O4oSK8DxxbBhH2cJ-gWnjoRonQoCy4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1061627715982-ftj5thabveldpetq51ou5r03gpo5l578.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

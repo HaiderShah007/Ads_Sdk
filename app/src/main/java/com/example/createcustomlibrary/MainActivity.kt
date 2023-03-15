@@ -2,6 +2,7 @@ package com.example.createcustomlibrary
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.example.adssdk.BannerAds
 import com.example.adssdk.ToasterMessage
 
 class MainActivity : AppCompatActivity() {
@@ -10,5 +11,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         ToasterMessage.s(this,"Hello")
+        BannerAds(activity = this, layout = findViewById(R.id.text))
     }
 }
