@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?><!-- START xml_defaults -->
+<defaultsMap>
+    <entry>
+        <key>ad_open_app</key>
+        <value>true</value>
+    </entry>
+    <entry>
+        <key>ad_fullscreen_create</key>
+        <value>true</value>
+    </entry>
+    <entry>
+        <key>ad_rewarded_create</key>
+        <value>false</value>
+    </entry>
+    <entry>
+        <key>ad_fullscreen_categories</key>
+        <value>true</value>
+    </entry>
+    <entry>
+        <key>ad_fullscreen_extra_ads</key>
+        <value>false</value>
+    </entry>
+    <entry>
+        <key>ad_native_privacy_policy</key>
+        <value>true</value>
+    </entry>
+    <entry>
+        <key>ad_native_home</key>
+        <value>true</value>
+    </entry>
+
+    <entry>
+        <key>ad_native_recycler</key>
+        <value>true</value>
+    </entry>
+    <entry>
+        <key>ad_native_exit_screen</key>
+        <value>true</value>
+    </entry>
+    <entry>
+        <key>ad_native_my_stickers</key>
+        <value>true</value>
+    </entry>
+    <entry>
+        <key>ad_native_edit_sticker</key>
+        <value>true</value>
+    </entry>
+    <entry>
+        <key>ad_banner_main</key>
+        <value>false</value>
+    </entry>
+
+
+</defaultsMap>
