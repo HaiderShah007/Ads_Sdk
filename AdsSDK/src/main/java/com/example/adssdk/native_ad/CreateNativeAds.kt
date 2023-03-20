@@ -3,7 +3,6 @@ package com.example.adssdk.native_ad
 import android.accounts.NetworkErrorException
 import android.app.Activity
 import android.content.Context
-import android.os.Debug
 import android.util.AttributeSet
 import android.util.Log
 import android.view.View
@@ -11,6 +10,7 @@ import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.adssdk.billing.BillingUtil
@@ -28,6 +28,7 @@ import com.google.android.gms.ads.nativead.NativeAd
 import com.google.android.gms.ads.nativead.NativeAdOptions
 import com.google.android.gms.ads.nativead.NativeAdView
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.card.MaterialCardView
 import com.google.android.material.snackbar.Snackbar
 import com.testads.sdk.R
 
@@ -47,15 +48,15 @@ class CreateNativeAds : LinearLayoutCompat {
     private lateinit var btnAdCall: MaterialButton
     private val nativeLogs = "fullNative"
     private val nativeTestId = "ca-app-pub-3940256099942544/2247696110"
-    var adHeight: Float? = 0.0f
-    var adView: NativeAdView? = null
 
+    lateinit var nativeAdView: NativeAdView
     var currentNativeAd: NativeAd? = null
 
     init {
         try {
             removeAllViewsInLayout()
-            inflate(context, R.layout.native_ad_view, this)
+             inflate(context, R.layout.native_ad_view, this)
+
             textAd = findViewById(R.id.ad)
             textAdBody = findViewById(R.id.ad_body)
             btnAdCall = findViewById(R.id.ad_call_to_action)
@@ -66,8 +67,8 @@ class CreateNativeAds : LinearLayoutCompat {
             adStar = findViewById(R.id.ad_stars)
             textAdPrice = findViewById(R.id.ad_price)
             textAdStore = findViewById(R.id.ad_store)
-            adView = findViewById(R.id.nativeAdView)
             textAdAdvertiser = findViewById(R.id.ad_advertiser)
+            nativeAdView = findViewById(R.id.nativeAdView)
 
         } catch (e: Exception) {
             Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
@@ -80,37 +81,8 @@ class CreateNativeAds : LinearLayoutCompat {
     }
 
 
-    constructor(context: Context):super(context)
-    /*constructor(
-        context: Context,
-        activity: Activity,
-        nativeAdId: String,
-        adHeight: Float,
-        adView: NativeAdView?
-    ) : super(context) {
-        this.activity = activity
-        this.adHeight = adHeight
-        //this.adView = adView
-        nativeProductionId = nativeAdId
-        val regex = Regex(Constant.regexPattern)
-        val isValid = regex.matches(nativeAdId)
+    constructor(context: Context) : super(context)
 
-        if (!isValid) {
-            throw IllegalArgumentException("Your Ad Id is not correct: Please add in valid pattern e.g: ca-app-pub-3940256099942544/6300978111")
-        }
-        if (isDebug()) {
-            if (nativeAdId == "") {
-                nativeProductionId = nativeTestId
-            }
-        } else {
-            if (nativeProductionId == "") {
-                throw IllegalArgumentException("Ad Id is not valid")
-
-            } else if (Constant.getTestIds().contains(nativeProductionId)) {
-                throw IllegalArgumentException("Please add production Ad id in release version")
-            }
-        }
-    }*/
 
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
 
@@ -181,14 +153,14 @@ class CreateNativeAds : LinearLayoutCompat {
     ) {
         val regex = Regex(Constant.regexPattern)
         val isValid = regex.matches(nativeAdId)
-        if (!isDebug()){
+        if (!isDebug()) {
             if (Constant.getTestIds().contains(nativeAdId)) {
                 throw IllegalArgumentException("Please add production Ad id in release version")
             }
         }
         if (!isValid) {
             throw IllegalArgumentException("Your Ad Id is not correct: Please add in valid pattern e.g: ca-app-pub-3940256099942544/6300978111")
-        }else{
+        } else {
             if (isNetworkAvailable(context) && !BillingUtil(
                     context as Activity,
                     object : BillingUtil.SuccessPurchase {
@@ -216,7 +188,6 @@ class CreateNativeAds : LinearLayoutCompat {
                     activity,
                     if (isDebug()) nativeTestId else nativeAdId
                 )
-                Toast.makeText(context, "Hello there", Toast.LENGTH_SHORT).show()
                 builder.forNativeAd { nativeAd ->
 
                     if (currentNativeAd != null) {
@@ -224,7 +195,6 @@ class CreateNativeAds : LinearLayoutCompat {
                     }
                     isNativeLoading = false
                     currentNativeAd = nativeAd
-                    populateUnifiedNativeAdViewMain(null)
                     Log.d(nativeLogs, " Native  loaded native Ad")
                     nativeListener.nativeAdLoaded(currentNativeAd)
                 }
@@ -246,7 +216,8 @@ class CreateNativeAds : LinearLayoutCompat {
                         if (isDebug()) {
                             Snackbar.make(
                                 activity.window.decorView.rootView,
-                                " Native AD Error Native: ${loadAdError.message}", Snackbar.LENGTH_LONG
+                                " Native AD Error Native: ${loadAdError.message}",
+                                Snackbar.LENGTH_LONG
                             ).show()
                         }
                         Log.d(nativeLogs, "Native failed native Ad  ${loadAdError.message}")
@@ -303,19 +274,36 @@ class CreateNativeAds : LinearLayoutCompat {
         }
 
 
-
     }
 
 
     fun populateUnifiedNativeAdViewMain(
-        onNativeView: OnNativeView?,
+        activity: Activity,
+        nativeAd: NativeAd,
+        adHeight: Float,
+        onNativeView: OnNativeView
     ) {
+        nativeAdView =
+            activity.layoutInflater.inflate(
+                R.layout.native_ad_view,
+                null
+            ) as NativeAdView
 
-        // The headline and mediaContent are guaranteed to be in every UnifiedNativeAd.
-        (textAdHeadline as TextView).text = currentNativeAd?.headline
-        if (adHeight!! > 170.0) {
+        textAd = nativeAdView.findViewById(R.id.ad)
+        textAdBody = nativeAdView.findViewById(R.id.ad_body)
+        btnAdCall = nativeAdView.findViewById(R.id.ad_call_to_action)
+        addAppIcon = nativeAdView.findViewById(R.id.ad_app_icon)
+        cardViewNative = nativeAdView.findViewById(R.id.cardViewNative)
+        adMedia = nativeAdView.findViewById(R.id.ad_media)
+        textAdHeadline = nativeAdView.findViewById(R.id.ad_headline)
+        adStar = nativeAdView.findViewById(R.id.ad_stars)
+        textAdPrice = nativeAdView.findViewById(R.id.ad_price)
+        textAdStore = nativeAdView.findViewById(R.id.ad_store)
+        textAdAdvertiser = nativeAdView.findViewById(R.id.ad_advertiser)
+        nativeAdView = nativeAdView.findViewById(R.id.nativeAdView)
 
-
+        textAdHeadline.text = nativeAd.headline
+        if (adHeight > 170.0) {
             adMedia.visibility = View.VISIBLE
             adMedia.setImageScaleType(ImageView.ScaleType.FIT_XY)
         } else {
@@ -323,43 +311,39 @@ class CreateNativeAds : LinearLayoutCompat {
         }
         // These assets aren't guaranteed to be in every UnifiedNativeAd, so it's important to
         // check before trying to display them.
-        if (currentNativeAd?.body == null) {
+        if (nativeAd.body == null) {
             textAdBody.visibility = View.INVISIBLE
         } else {
             textAdBody.visibility = View.VISIBLE
-            textAdBody.text = currentNativeAd?.body
+            textAdBody.text = nativeAd.body
         }
-        if (currentNativeAd?.callToAction == null) {
+        if (nativeAd.callToAction == null) {
             btnAdCall.visibility = View.INVISIBLE
         } else {
             btnAdCall.visibility = View.VISIBLE
-            btnAdCall.text = currentNativeAd?.callToAction
+            btnAdCall.text = nativeAd.callToAction
         }
-        if (currentNativeAd?.icon == null) {
+        if (nativeAd.icon == null) {
             addAppIcon.visibility = View.GONE
         } else {
             addAppIcon.setImageDrawable(
-                currentNativeAd?.icon?.drawable
+                nativeAd.icon?.drawable
             )
             addAppIcon.visibility = View.VISIBLE
         }
 
-        if (currentNativeAd?.starRating == null) {
+        if (nativeAd.starRating == null) {
             adStar.visibility = View.INVISIBLE
         } else {
-            adStar.rating = currentNativeAd?.starRating?.toFloat()!!
-            adStar.visibility = View.GONE
+            adStar.rating = nativeAd.starRating?.toFloat()!!
+            adStar.visibility = View.VISIBLE
         }
         // This method tells the Google Mobile Ads SDK that you have finished populating your
         // native ad view with this native ad.
-        currentNativeAd?.let { adView?.setNativeAd(it) }
-        onNativeView?.nativeViewFind(
+        nativeAdView.setNativeAd(nativeAd)
+        onNativeView.nativeViewFind(
             cardViewNative,
             textAdHeadline, textAdBody, textAd
         )
-
-    }
-    interface ButtonClick {
-        fun onButtonClick()
     }
 }

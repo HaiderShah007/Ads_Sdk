@@ -2,9 +2,13 @@ package com.example.createcustomlibrary
 
 import android.os.Bundle
 import android.util.Log
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.adssdk.banner_ads.BannerAds
+import com.example.adssdk.callbacks.NativeListener
+import com.example.adssdk.callbacks.OnNativeView
 import com.example.adssdk.callbacks.RemoteConfigCallback
 import com.example.adssdk.intertesialAds.AdMobFullScreenListener
 import com.example.adssdk.intertesialAds.FullScreenAdListener
@@ -57,13 +61,7 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this, e.message, Toast.LENGTH_SHORT).show()
         }
 
-        /*binding.naviteAds.setButtonClickListener(object :NativeAds.ButtonClick{
-            override fun onButtonClick() {
-                Toast.makeText(this@MainActivity, "I'm Clicked", Toast.LENGTH_SHORT).show()
-            }
 
-        })*/
-        val ads = CreateNativeAds(this)
         /*ads.loadNativeAd(object :NativeListener{
 
         })
@@ -107,5 +105,36 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this, e.message, Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val ads = CreateNativeAds(this)
+        ads.loadNativeAd(this,Native_Advanced_Video,object :NativeListener{
+            override fun nativeAdLoaded(currentNativeAd: com.google.android.gms.ads.nativead.NativeAd?) {
+                if (currentNativeAd != null) {
+                    ads.populateUnifiedNativeAdViewMain(this@MainActivity,currentNativeAd,171.0f,object :OnNativeView{
+                        override fun nativeViewFind(
+                            cardViewNative: ConstraintLayout,
+                            headlineView: TextView,
+                            bodyView: TextView,
+                            ad: TextView
+                        ) {
+                            Toast.makeText(this@MainActivity, headlineView.text, Toast.LENGTH_SHORT).show()
+                        }
+
+                    })
+                }
+            }
+
+            override fun nativeAdFailed(loadAdError: com.google.android.gms.ads.LoadAdError) {
+                Toast.makeText(this@MainActivity, loadAdError.message, Toast.LENGTH_SHORT).show()
+            }
+
+            override fun nativeAdValidate(string: String) {
+                Toast.makeText(this@MainActivity, string, Toast.LENGTH_SHORT).show()
+            }
+
+        },171.0f)
     }
 }
