@@ -9,6 +9,7 @@ import com.example.adssdk.callbacks.RemoteConfigCallback
 import com.example.adssdk.intertesialAds.AdMobFullScreenListener
 import com.example.adssdk.intertesialAds.FullScreenAdListener
 import com.example.adssdk.intertesialAds.FullScreenAds
+import com.example.adssdk.native_ad.CreateNativeAds
 import com.example.adssdk.remote_config.RemoteConfiguration
 import com.example.adssdk.types.AdTypes
 import com.example.createcustomlibrary.databinding.ActivityMainBinding
@@ -56,6 +57,30 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this, e.message, Toast.LENGTH_SHORT).show()
         }
 
+        /*binding.naviteAds.setButtonClickListener(object :NativeAds.ButtonClick{
+            override fun onButtonClick() {
+                Toast.makeText(this@MainActivity, "I'm Clicked", Toast.LENGTH_SHORT).show()
+            }
+
+        })*/
+        val ads = CreateNativeAds(this)
+        /*ads.loadNativeAd(object :NativeListener{
+
+        })
+        CoroutineScope(Dispatchers.Main).launch {
+            delay(3000)
+            ads.populateUnifiedNativeAdViewMain(object :OnNativeView{
+                override fun nativeViewFind(
+                    cardViewNative: ConstraintLayout,
+                    headlineView: TextView,
+                    bodyView: TextView,
+                    ad: TextView
+                ) {
+
+                }
+
+            })
+        }*/
         binding.btnOpenAd.setOnClickListener {
             try {
                 FullScreenAds(this,Interstitial).showAndLoad(object :AdMobFullScreenListener{

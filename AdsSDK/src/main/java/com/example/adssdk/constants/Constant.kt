@@ -22,6 +22,7 @@ object Constant {
     const val def_value = "IT_ZONE_SDK"
     const val ads_json = "ads_json"
     var isOpenAdNotShow: Boolean = false
+    var isNativeLoading: Boolean = false
     val regexPattern = "ca-app-pub-\\d{16}/\\d{10}"
     var isBannerAdLoading: Boolean = false
     var isMediumAdLoading: Boolean = false
@@ -30,6 +31,8 @@ object Constant {
     var isAdLoading: Boolean = false
     var mInterstitialAd: InterstitialAd? = null
     var isShowingInterAd = false
+    var nativeCounter = 0
+    var isOpenNative = false
     fun isNetworkAvailable(context: Context?): Boolean {
         if (context == null) return false
         val connectivityManager =

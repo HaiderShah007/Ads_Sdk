@@ -54,7 +54,6 @@ class BannerAds(
             } else if (getTestIds().contains(bannerProductionId)) {
                 throw IllegalArgumentException("Please add production Ad id in release version")
             }
-
         }
 
         viewHeight = getHeightAndWidth(view).first
